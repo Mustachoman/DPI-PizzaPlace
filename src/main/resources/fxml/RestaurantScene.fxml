@@ -17,6 +17,6 @@
       <Label layoutX="412.0" layoutY="18.0" text="Taken Orders" />
       <ListView fx:id="lstTakenOrders" layoutX="412.0" layoutY="38.0" prefHeight="200.0" prefWidth="200.0" />
       <TextField id="txtOrderStatus" fx:id="txtOrderStatus" layoutX="409.0" layoutY="245.0" promptText="Order status..." />
-      <Button fx:id="btnUpdate" layoutX="560.0" layoutY="245.0" mnemonicParsing="false" text="Update" />
+      <Button fx:id="btnUpdate" layoutX="560.0" layoutY="245.0" mnemonicParsing="false" onAction="#sendOrderStatusUpdate" text="Update" />
     </children>
 </AnchorPane>

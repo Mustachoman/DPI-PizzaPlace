@@ -16,6 +16,7 @@ import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import java.io.IOException;
+import java.util.Observable;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,17 +25,17 @@ import java.util.logging.Logger;
  *
  * @author Marijn
  */
-public class OrderQueue {
+public class OrderQueue extends Observable {
 
     private static final String ORDER_QUEUE = "ordertest";
     private final Channel orderChannel;
 
-    public OrderQueue(String uuid) throws IOException, TimeoutException {
+    public OrderQueue(String customerId) throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         Connection connection = factory.newConnection();
         this.orderChannel = connection.createChannel();
-        this.subscribeToOrderStatus(uuid);
+        this.subscribeToOrderStatus(customerId);
     }
 
     public void PlaceOrder(Order newOrder) throws IOException, TimeoutException {
@@ -47,16 +48,25 @@ public class OrderQueue {
         System.out.println("Placed Order '" + newOrder.toString() + "'");
     }
 
-    private void subscribeToOrderStatus(String uuid) throws IOException {
-        orderChannel.queueDeclare(uuid, false, false, false, null);
+    private void subscribeToOrderStatus(String customerId) throws IOException {
+        orderChannel.exchangeDeclare(customerId, BuiltinExchangeType.DIRECT);
+        String queueName = orderChannel.queueDeclare().getQueue();
+        
+        orderChannel.queueBind(queueName, customerId, "");
+//        orderChannel.queueDeclare(customerId, false, false, false, null);
         Consumer consumer = new DefaultConsumer(orderChannel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
                     throws IOException {
                 String message = new String(body, "UTF-8");
-                System.out.println(" [x] Order status received '" + message + "'");
+                notifyUpdate(message);
             }
         };
-        orderChannel.basicConsume(uuid, true, consumer);
+        orderChannel.basicConsume(queueName, false, consumer);
+    }
+    
+    private void notifyUpdate(String statusUpdate){
+        this.setChanged();
+        this.notifyObservers(statusUpdate);
     }
 }

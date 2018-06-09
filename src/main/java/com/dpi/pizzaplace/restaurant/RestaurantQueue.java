@@ -105,7 +105,8 @@ public final class RestaurantQueue extends Observable {
 
     public void sendCustomerUpdate(Order o, String orderStatus) throws IOException {
         channel.exchangeDeclare(o.getCustomerId(), BuiltinExchangeType.DIRECT);
-        channel.basicPublish(o.getCustomerId(), null, null, orderStatus.getBytes("UTF-8"));
+        String message = "Status update for '" + o.getType() + "' : '" + orderStatus + "'";
+        channel.basicPublish(o.getCustomerId(), "", null, message.getBytes("UTF-8"));
         System.out.println("Updated order '" + o.getId() + "' with status'" + orderStatus + "'");
     }
 }

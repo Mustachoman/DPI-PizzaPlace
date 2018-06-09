@@ -7,8 +7,8 @@ package com.dpi.pizzaplace.queuemanager;
 
 import com.dpi.pizzaplace.entities.Order;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -29,21 +29,26 @@ public class QueueManager extends Application implements Observer {
     private OrderQueue oq;
     private RestaurantQueue rq;
     private List<Order> orders;
+    private HashMap<String,String> orderCustomers;
 
     public QueueManager() {
         this.orders = new ArrayList<>();
+        this.orderCustomers = new HashMap();
     }
 
     @Override
     public void update(Observable o, Object o1) {
         Order incomingOrder = (Order) o1;
         if (!this.orders.contains(incomingOrder)) {
+            this.orderCustomers.put(incomingOrder.getId(), incomingOrder.getCustomerId());
+            incomingOrder.setCustomerId("");
             this.orders.add(incomingOrder);
             this.handleOrder(incomingOrder);
         } else {
             Order foundOrder = this.orders.get(this.orders.indexOf(incomingOrder));
             if (foundOrder.getTakenBy().isEmpty()){
                 foundOrder.setTakenBy(incomingOrder.getTakenBy());
+                foundOrder.setCustomerId(this.orderCustomers.get(foundOrder.getId()));
             }
             this.handleOrder(foundOrder);
         }

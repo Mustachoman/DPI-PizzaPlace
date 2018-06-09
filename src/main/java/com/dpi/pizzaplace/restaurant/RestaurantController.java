@@ -83,6 +83,13 @@ public class RestaurantController implements Initializable, Observer {
         o.setTakenBy(this.restaurantId);
         this.rq.claimAvailableOrder(o);
     }
+    
+    @FXML
+    private void sendOrderStatusUpdate(ActionEvent event) throws IOException{
+        Order selectedOrder = (Order) this.lstTakenOrders.getSelectionModel().getSelectedItem();
+        this.rq.sendCustomerUpdate(selectedOrder, this.txtOrderStatus.getText());
+        this.txtOrderStatus.setText("");
+    }
 
     @Override
     public void update(Observable o, Object o1) {
@@ -102,7 +109,7 @@ public class RestaurantController implements Initializable, Observer {
         }
         if (incomingOrder.getTakenBy().isEmpty()) {
             Platform.runLater(() -> {
-                this.availableOrders.remove(incomingOrder);
+                this.availableOrders.add(incomingOrder);
             });
         }
     }
