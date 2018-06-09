@@ -29,11 +29,12 @@ public class OrderQueue {
     private static final String ORDER_QUEUE = "ordertest";
     private final Channel orderChannel;
 
-    public OrderQueue() throws IOException, TimeoutException {
+    public OrderQueue(String uuid) throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         Connection connection = factory.newConnection();
         this.orderChannel = connection.createChannel();
+        this.subscribeToOrderStatus(uuid);
     }
 
     public void PlaceOrder(Order newOrder) throws IOException, TimeoutException {
@@ -43,12 +44,11 @@ public class OrderQueue {
         String message = om.writeValueAsString(newOrder);
 
         orderChannel.basicPublish(ORDER_QUEUE, "", null, message.getBytes("UTF-8"));
-        this.subscribeToOrderStatus(newOrder);
         System.out.println("Placed Order '" + newOrder.toString() + "'");
     }
 
-    private void subscribeToOrderStatus(Order order) throws IOException {
-        orderChannel.queueDeclare(order.getId(), false, false, false, null);
+    private void subscribeToOrderStatus(String uuid) throws IOException {
+        orderChannel.queueDeclare(uuid, false, false, false, null);
         Consumer consumer = new DefaultConsumer(orderChannel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
@@ -57,6 +57,6 @@ public class OrderQueue {
                 System.out.println(" [x] Order status received '" + message + "'");
             }
         };
-        orderChannel.basicConsume(order.getId(), true, consumer);
+        orderChannel.basicConsume(uuid, true, consumer);
     }
 }

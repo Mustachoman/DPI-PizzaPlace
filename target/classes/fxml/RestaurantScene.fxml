@@ -6,12 +6,17 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="264.0" prefWidth="385.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dpi.pizzaplace.restaurant.RestaurantController">
+<AnchorPane id="AnchorPane" prefHeight="282.0" prefWidth="693.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dpi.pizzaplace.restaurant.RestaurantController">
     <children>
-        <Button id="btnTakeOrder" fx:id="btnTakeOrder" layoutX="228.0" layoutY="225.0" onAction="#handleButtonAction" text="Take Order" />
+        <Button id="btnTakeOrder" fx:id="btnTakeOrder" layoutX="176.0" layoutY="245.0" onAction="#handleButtonAction" text="Take Order" />
         <Label fx:id="label" layoutX="231.0" layoutY="201.0" minHeight="16" minWidth="69" />
-      <ListView id="lstOrders" fx:id="lstOrders" prefHeight="264.0" prefWidth="223.0" />
-      <TextField id="txtRestaurantLocation" fx:id="txtRestaurantLocation" layoutX="231.0" layoutY="14.0" prefHeight="25.0" prefWidth="144.0" promptText="Area..." text="NL" />
-      <Button id="btnSetLocation" fx:id="btnSetLocation" layoutX="231.0" layoutY="47.0" mnemonicParsing="false" onAction="#setLocation" text="Set location" />
+      <ListView id="lstOrders" fx:id="lstOrders" layoutX="176.0" layoutY="38.0" prefHeight="200.0" prefWidth="223.0" />
+      <TextField id="txtRestaurantLocation" fx:id="txtRestaurantLocation" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="144.0" promptText="Area..." text="NL" />
+      <Button id="btnSetLocation" fx:id="btnSetLocation" layoutX="14.0" layoutY="47.0" mnemonicParsing="false" onAction="#setLocation" text="Set location" />
+      <Label layoutX="176.0" layoutY="18.0" text="Available Orders" />
+      <Label layoutX="412.0" layoutY="18.0" text="Taken Orders" />
+      <ListView fx:id="lstTakenOrders" layoutX="412.0" layoutY="38.0" prefHeight="200.0" prefWidth="200.0" />
+      <TextField id="txtOrderStatus" fx:id="txtOrderStatus" layoutX="409.0" layoutY="245.0" promptText="Order status..." />
+      <Button fx:id="btnUpdate" layoutX="560.0" layoutY="245.0" mnemonicParsing="false" text="Update" />
     </children>
 </AnchorPane>

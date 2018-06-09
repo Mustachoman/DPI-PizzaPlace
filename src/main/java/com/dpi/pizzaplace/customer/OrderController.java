@@ -4,6 +4,7 @@ import com.dpi.pizzaplace.entities.Order;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +51,7 @@ public class OrderController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            this.oq = new OrderQueue();
+            this.oq = new OrderQueue(UUID.randomUUID().toString());
         } catch (IOException | TimeoutException ex) {
             Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
         }

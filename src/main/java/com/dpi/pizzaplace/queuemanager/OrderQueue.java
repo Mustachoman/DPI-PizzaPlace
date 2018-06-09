@@ -23,12 +23,12 @@ import java.util.concurrent.TimeoutException;
  *
  * @author Marijn
  */
-public final class QueueReceiver extends Observable {
+public final class OrderQueue extends Observable {
     
     private static final String ORDER_QUEUE = "ordertest";
     private final Channel orderChannel;
     
-    public QueueReceiver() throws IOException, TimeoutException{
+    public OrderQueue() throws IOException, TimeoutException{
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         Connection connection = factory.newConnection();
